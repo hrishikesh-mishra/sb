@@ -2,6 +2,8 @@
 //findProject(':web')?.name = 'com.hrishikeshmishra.sp'
 //include 'schedulingtasks'
 //findProject(':schedulingtasks')?.name = 'com.hrishikeshmishra.sb'
-include 'devicedetection'
-findProject(':devicedetection')?.name = 'com.hrishikeshmishra.sb'
+//include ''
+//findProject(':devicedetection')?.name = 'com.hrishikeshmishra.sb'
+include 'db'
+findProject(':db')?.name = 'com.hrishikeshmishra.sb'
 

@@ -1,2 +1,4 @@
 rootProject.name = 'com.hrishikeshmishra.sb'
+includeFlat 'database'
+findProject(':database')?.name = 'com.hrishikeshmishra.sb'
 
