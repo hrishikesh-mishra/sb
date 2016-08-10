@@ -5,5 +5,4 @@
 //include ''
 //findProject(':devicedetection')?.name = 'com.hrishikeshmishra.sb'
 include 'db'
-findProject(':db')?.name = 'com.hrishikeshmishra.sb'
 

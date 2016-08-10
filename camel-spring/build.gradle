@@ -1,9 +1,7 @@
-group 'web'
-version '1.0'
-
 apply plugin: 'java'
 
-sourceCompatibility = 1.5
+sourceCompatibility = 1.8
+version = '1.0'
 
 repositories {
     mavenCentral()
