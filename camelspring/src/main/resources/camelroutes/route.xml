@@ -1,0 +1,7 @@
+<routes xmlns="http://camel.apache.org/schema/spring">
+    <route id="test-route">
+        <from uri="direct://push-to-legacy" />
+        <process ref="requestTransformer" />
+        <process ref="requestSender" />
+    </route>
+</routes>
