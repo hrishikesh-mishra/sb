@@ -13,22 +13,13 @@ public class GroovyJavaApplication {
     static final GroovyClassLoader classLoader = new GroovyClassLoader();
 
 	public static void main(String[] args) throws IllegalAccessException, IOException, InstantiationException {
-        example6();
+
 	    example4();
 	    example3();
 	    example2();
         example1();
 	}
 
-	private static void example6() throws IOException, IllegalAccessException, InstantiationException {
-        // Load Groovy script file.
-
-        Class groovy = classLoader.parseClass(new File("/Users/hrishikesh.mishra/hrishi/codes/sb/groovyjava/src/main/resources/SampleScript2.groovy"));
-
-        GroovyObject groovyObj = (GroovyObject) groovy.newInstance();
-        String output = (String) groovyObj.invokeMethod("scriptSays", new Object[] { new Obj(12) });
-        System.out.println(output);
-    }
 
 	private static void example4() throws IOException, IllegalAccessException, InstantiationException {
         // Create GroovyClassLoader.

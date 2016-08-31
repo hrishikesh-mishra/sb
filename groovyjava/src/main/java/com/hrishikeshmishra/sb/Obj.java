@@ -1,12 +1,16 @@
 package com.hrishikeshmishra.sb;
 
-/**
- * Created by hrishikesh.mishra on 31/08/16.
- */
-class Obj {
-    public int num;
 
-    public Obj(int num) {
-        this.num = num;
+import java.util.Map;
+
+class Obj {
+    private Map<String, Integer> map;
+
+    public Obj(Map<String, Integer> map) {
+        this.map = map;
+    }
+
+    public Map<String, Integer> getMap() {
+        return map;
     }
 }
