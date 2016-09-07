@@ -1,2 +1,5 @@
 include 'camelspring'
+include 'springmvcex1'
+include 'spring-batch'
+include 'springbatch'
 
