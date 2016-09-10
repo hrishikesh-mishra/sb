@@ -3,4 +3,5 @@ include 'springmvcex1'
 include 'spring-batch'
 include 'springbatch'
 include 'redis-data'
+include 'vendor-background-job'
 
