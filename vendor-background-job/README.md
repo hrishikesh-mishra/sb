@@ -1,7 +1,7 @@
 # Vendor Background Job
 
 ## Start Redis Server
-    *   redis-server
+    redis-server
 
 ## Redis Sentinel config file (s.conf)
     sentinel monitor mymaster 127.0.0.1 6379 1
@@ -13,26 +13,27 @@
 ## Start Redis Sentinel
      redis-server s.conf --sentinel
 
-## Load dummy data to Redis
-
-    * `../gradlew clean build bootRun -Predis='load'`
-
-
 ## Clean dummy data from Redis
 
 
-    * `../gradlew clean build bootRun -Predis='clean'`
+    * ../gradlew clean build bootRun -Predis='clean'
+
+
+## Load dummy data to Redis
+
+    * ../gradlew clean build bootRun -Predis='load'
+
 
 
 ### Start Dummy Vendor and Orchestrator Service
 
-    *   Goto  `sb/http-server` And Run
-    * `../gradlew clean build bootRun`
+    *   Goto  sb/http-server And Run
+    * ../gradlew clean build bootRun
 
 
 ### Start Confirm Vendor Background Job
 
-    * Goto `sb/vendor-background-job` And Run
-    * `../gradlew clean build bootRun`
+    * Goto sb/vendor-background-job And Run
+    * ../gradlew clean build bootRun
 
     * You Done, Now  monitor logs
