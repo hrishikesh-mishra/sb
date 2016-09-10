@@ -1,52 +1,60 @@
 package com.hrishikeshmishra.bj.steps;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hrishikeshmishra.bj.models.Constants;
 import com.hrishikeshmishra.bj.models.Vendor;
 import com.hrishikeshmishra.bj.models.VendorRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import java.util.Map;
+import java.io.IOException;
+import java.util.Objects;
 
-import static com.hrishikeshmishra.bj.models.Constants.DETAIL;
 import static com.hrishikeshmishra.bj.models.Constants.QUEUE_NAME;
 
 /**
  * Created by hrishikesh.mishra on 09/09/16.
  */
+@Component
 public class VendorItemReader implements ItemReader<VendorRequest> {
 
-    @Autowired
+    private static final Logger log = LoggerFactory.getLogger(VendorItemReader.class);
+
+    private ObjectMapper objectMapper;
     private StringRedisTemplate redisTemplate;
 
-    @Resource(name="redisTemplate")
-    private ListOperations<String, String> listOps;
 
-    @Resource(name="redisTemplate")
-    private HashOperations<String, String, String> hashOperations;
+    @Autowired
+    public VendorItemReader(StringRedisTemplate  redisTemplate) {
+        this.redisTemplate = redisTemplate;
+        this.objectMapper = new ObjectMapper();
+    }
 
     @Override
     public VendorRequest read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        if (listOps.size(QUEUE_NAME) == 0) return null;
-        String sr = listOps.leftPop(QUEUE_NAME);
+        log.info("Starting Job ... : ");
+        String sr = getSR();
+        if (Objects.isNull(sr)) return null;
+        log.info("Read SR:  {}", sr);
         return new VendorRequest(sr, getVendor(sr));
     }
 
-    private Vendor getVendor(String sr){
-        Map<String, String> srDetail = hashOperations.entries(sr.concat(DETAIL));
-        return new Vendor(
-                    srDetail.get("merchantReferenceId"),
-                    srDetail.get("merchantCode"),
-                    srDetail.get("sourceType"),
-                    Double.parseDouble(srDetail.get("shipmentValue")),
-                    Double.parseDouble(srDetail.get("amountToCollect")),
-                    Long.parseLong(srDetail.get("originPincode"))
-        );
+    private String getSR(){
+        ListOperations<String, String> listOps = this.redisTemplate.opsForList();
+        return (listOps.size(QUEUE_NAME) == 0) ? null : listOps.rightPop(QUEUE_NAME);
+    }
+
+    private Vendor getVendor(String sr) throws IOException {
+        ValueOperations<String, String> valueOps = this.redisTemplate.opsForValue();
+        return  objectMapper.readValue(valueOps.get((sr.concat(Constants.DETAIL))), Vendor.class);
     }
 }

@@ -15,6 +15,11 @@ public class VendorInfo {
     private VendorStatus vendorStatus;
     private String currentVendor;
 
+    public VendorInfo(String serviceRequestId, VendorStatus vendorStatus) {
+        this.serviceRequestId = serviceRequestId;
+        this.vendorStatus = vendorStatus;
+    }
+
     public static enum VendorStatus {
         NOT_CHANGED,
         CHANGED,

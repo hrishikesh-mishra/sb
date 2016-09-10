@@ -6,18 +6,26 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisSentinelConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * Created by hrishikesh.mishra on 09/09/16.
  */
 @Configuration
-public class AppConfig {
+public class RedisConfig {
 
     @Bean
     public StringRedisTemplate redisTemplate() {
         return new StringRedisTemplate(connectionFactory());
+//        redisTemplate.setDefaultSerializer(getSerializer());
+//        redisTemplate.setConnectionFactory(connectionFactory());
+//        return redisTemplate;
     }
+
+//    @Bean
+//    public StringRedisSerializer getSerializer(){
+//        return new StringRedisSerializer();
+//    }
+
 
     @Bean
     public RedisConnectionFactory connectionFactory() {
@@ -30,10 +38,4 @@ public class AppConfig {
                 master("mymaster").
                 sentinel("127.0.0.1", 26379);
     }
-
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
-
 }

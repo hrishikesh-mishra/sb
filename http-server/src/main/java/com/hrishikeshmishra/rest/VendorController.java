@@ -33,7 +33,7 @@ public class VendorController {
             case 0:
                 return new VendorResponse("NOT_CHANGED");
             case 1:
-                return new VendorResponse("CHANGED");
+                return new VendorResponse("CHANGED" , "new vendor");
             default:
                 return new VendorResponse("VNF");
         }

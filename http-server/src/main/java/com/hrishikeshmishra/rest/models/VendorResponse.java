@@ -7,9 +7,15 @@ package com.hrishikeshmishra.rest.models;
 public class VendorResponse {
 
     private String status;
+    private String newVendor;
 
     public VendorResponse(String status) {
         this.status = status;
+    }
+
+    public VendorResponse(String status, String newVendor) {
+        this.status = status;
+        this.newVendor = newVendor;
     }
 
     public String getStatus() {
@@ -20,10 +26,19 @@ public class VendorResponse {
         this.status = status;
     }
 
+    public String getNewVendor() {
+        return newVendor;
+    }
+
+    public void setNewVendor(String newVendor) {
+        this.newVendor = newVendor;
+    }
+
     @Override
     public String toString() {
         return "VendorResponse{" +
                 "status='" + status + '\'' +
+                ", newVendor='" + newVendor + '\'' +
                 '}';
     }
 }

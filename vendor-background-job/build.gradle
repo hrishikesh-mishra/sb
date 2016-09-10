@@ -24,7 +24,7 @@ springBoot {
     if (project.hasProperty('redis')) {
         mainClass = "com.hrishikeshmishra.bj.redisdump.RedisDumper"
     }else {
-        mainClass = "com.hrishikeshmishra.bj.redisdump.Test"
+        mainClass = "com.hrishikeshmishra.bj.BJApp"
     }
 }
 

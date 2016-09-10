@@ -12,8 +12,6 @@ import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
-import javax.annotation.Resource;
-
 import java.io.IOException;
 
 import static com.hrishikeshmishra.bj.models.Constants.QUEUE_NAME;
@@ -21,7 +19,8 @@ import static com.hrishikeshmishra.bj.models.Constants.QUEUE_NAME;
 /**
  * Created by hrishikesh.mishra on 10/09/16.
  */
-@SpringBootApplication
+
+//@SpringBootApplication
 public class RedisDumper implements CommandLineRunner {
 
     private final static String SR_PREFIX = "SR_";
@@ -32,11 +31,6 @@ public class RedisDumper implements CommandLineRunner {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    @Resource(name = "redisTemplate")
-    private ListOperations<String, String> listOps;
-
-    @Resource(name = "redisTemplate")
-    private ValueOperations<String, String> valueOps;
 
     @Override
     public void run(String... args) throws Exception {
@@ -59,15 +53,17 @@ public class RedisDumper implements CommandLineRunner {
 
     private void writeToRedis() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
+        ListOperations<String, String> listOps = this.redisTemplate.opsForList();
+        ValueOperations<String, String> valueOps = this.redisTemplate.opsForValue();
         for (int i = 1; i <= LIMIT; i++) {
             System.out.println("\n------------------------------------------");
-            addSRToRedis(objectMapper, i);
+            addSRToRedis(objectMapper, i, listOps, valueOps);
             System.out.println("------------------------------------------");
         }
-        System.out.println("\n\nTotal Size of list: " +listOps.size(QUEUE_NAME) +"\n");
+
     }
 
-    private void addSRToRedis(ObjectMapper objectMapper, int index) throws JsonProcessingException {
+    private void addSRToRedis(ObjectMapper objectMapper, int index, ListOperations<String, String> listOps,  ValueOperations<String, String> valueOps  ) throws JsonProcessingException {
         String sr = SR_PREFIX.concat(String.valueOf(index));
         listOps.leftPush(QUEUE_NAME, sr);
         Vendor vendor = getRandomVendorObject(index);
@@ -77,16 +73,17 @@ public class RedisDumper implements CommandLineRunner {
 
     private void cleanRedis() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
+        ListOperations<String, String> listOps = this.redisTemplate.opsForList();
+        ValueOperations<String, String> valueOps = this.redisTemplate.opsForValue();
         while (listOps.size(QUEUE_NAME) > 0) {
             System.out.println("\n------------------------------------------");
-            removeFromRedis(objectMapper);
+            removeFromRedis(objectMapper, listOps, valueOps);
             System.out.println("------------------------------------------");
         }
     }
 
-    private void removeFromRedis(ObjectMapper objectMapper) throws IOException {
+    private void removeFromRedis(ObjectMapper objectMapper,  ListOperations<String, String> listOps,  ValueOperations<String, String> valueOps) throws IOException {
         String sr = listOps.rightPop(QUEUE_NAME);
-        System.out.printf(valueOps.get((sr.concat(Constants.DETAIL))));
         Vendor vendor = objectMapper.readValue(valueOps.get((sr.concat(Constants.DETAIL))), Vendor.class);
         System.out.println("Removed SR:" + sr + ", \nwith Vendor:" + vendor);
     }
