@@ -4,4 +4,5 @@ include 'spring-batch'
 include 'springbatch'
 include 'redis-data'
 include 'vendor-background-job'
+include 'http-server'
 

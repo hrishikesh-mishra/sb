@@ -86,6 +86,7 @@ public class RedisDumper implements CommandLineRunner {
 
     private void removeFromRedis(ObjectMapper objectMapper) throws IOException {
         String sr = listOps.rightPop(QUEUE_NAME);
+        System.out.printf(valueOps.get((sr.concat(Constants.DETAIL))));
         Vendor vendor = objectMapper.readValue(valueOps.get((sr.concat(Constants.DETAIL))), Vendor.class);
         System.out.println("Removed SR:" + sr + ", \nwith Vendor:" + vendor);
     }
