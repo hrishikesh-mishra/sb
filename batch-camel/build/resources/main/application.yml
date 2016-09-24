@@ -1,3 +1,0 @@
-camel:
-  springboot:
-    xmlRoutes: classpath:/camel-config.xml
