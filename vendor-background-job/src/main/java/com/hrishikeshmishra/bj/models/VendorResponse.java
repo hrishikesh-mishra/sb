@@ -13,5 +13,4 @@ import lombok.*;
 public class VendorResponse {
     private String status;
     private String newVendor;
-
 }

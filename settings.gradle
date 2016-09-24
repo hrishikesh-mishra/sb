@@ -5,4 +5,5 @@ include 'springbatch'
 include 'redis-data'
 include 'vendor-background-job'
 include 'http-server'
+include 'batch-camel'
 

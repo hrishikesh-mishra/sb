@@ -1,0 +1,48 @@
+<routes xmlns="http://camel.apache.org/schema/spring">
+
+
+    <threadPoolProfile id="defaultThreadPoolProfile" defaultProfile="true"
+                       poolSize="1" maxPoolSize="2" maxQueueSize="1"
+                       allowCoreThreadTimeOut="false"
+                       rejectedPolicy="CallerRuns"/>
+
+    <route id="background-process">
+
+        <from uri="direct://background-process" />
+
+        <throttle  timePeriodMillis="10000" asyncDelayed="true" executorServiceRef="defaultThreadPoolProfile">
+            <constant>1</constant>
+            <to uri="direct://vendor-service" />
+        </throttle>
+    </route>
+
+
+    <route id="vendor-service">
+        <from uri="direct://vendor-service" />
+
+
+        <process ref="prepareVendorRequest" />
+        <process ref="vendorService" />
+        <choice>
+            <when>
+                <simple>${headers.vendorStatus} == "CHANGED"</simple>
+                <to uri="direct://vendorChanged" />
+            </when>
+            <when>
+                <simple>${headers.vendorStatus} == "VNF"</simple>
+                <to uri="direct://vnf" />
+            </when>
+        </choice>
+    </route>
+
+    <route id="vendorChanged">
+        <from uri="direct://vendorChanged" />
+        <process ref="orchestratorVendorChange" />
+    </route>
+
+    <route id="vnf">
+        <from uri="direct://vnf" />
+        <process ref="orchestratorVNF" />
+    </route>
+
+</routes>
