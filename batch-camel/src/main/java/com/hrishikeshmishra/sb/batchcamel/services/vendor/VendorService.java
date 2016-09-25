@@ -31,11 +31,14 @@ public class VendorService implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
+        Long startTime = System.currentTimeMillis();
         VendorProcessorEntity entity = (VendorProcessorEntity) exchange.getIn().getBody();
         VendorResponse response = callVendorService(entity);
         VendorInfo vendorInfo = getVendorInfo(entity.getSrDetail(), response);
         exchange.getIn().setHeader("vendorStatus", vendorInfo.getVendorStatus());
         exchange.getIn().setBody(vendorInfo);
+        Long endTime = System.currentTimeMillis();
+        log.info("[VendorService] Process in {} ms", (endTime - startTime));
     }
 
     private VendorResponse callVendorService(VendorProcessorEntity entity) {

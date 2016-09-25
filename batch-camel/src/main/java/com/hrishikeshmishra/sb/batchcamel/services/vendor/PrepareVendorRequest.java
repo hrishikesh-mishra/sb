@@ -33,10 +33,13 @@ public class PrepareVendorRequest implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
+        Long startTime = System.currentTimeMillis();
         SRDetail srDetail = (SRDetail) exchange.getIn().getBody();
         log.info("[PrepareVendorRequest] process sr : {}", srDetail);
         VendorRequest request = getVendor(srDetail);
         exchange.getIn().setBody(new VendorProcessorEntity(srDetail, request));
+        Long endTime = System.currentTimeMillis();
+        log.info("[PrepareVendorRequest] Process in {} ms", (endTime - startTime));
     }
 
     private VendorRequest getVendor(SRDetail srDetail) throws IOException {

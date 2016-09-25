@@ -32,15 +32,22 @@ public class ScheduledTasks {
         this.producerTemplate = producerTemplate;
     }
 
-    @Scheduled(fixedRate = 5000)
-    public void reportCurrentTime() {
+    @Scheduled(fixedRate = 500)
+    public void confirmVendor() {
+        log.info("\n------------------------------------------------------------------------------------------------------------------------------" );
+        Long startTime = System.currentTimeMillis();
         List<SRDetail> srDetails = getSRs(2);
         log.info("[ScheduledTasks] starting for  SR : {} " , srDetails );
-        for (SRDetail srDetail : srDetails){
-            producerTemplate.requestBody(CAMEL_VENDOR_ROUTE, srDetail);
+        if(!Objects.isNull(srDetails)){
+            for (SRDetail srDetail : srDetails){
+                producerTemplate.requestBody(CAMEL_VENDOR_ROUTE, srDetail);
+            }
         }
         pushSR(srDetails);
         log.info("[ScheduledTasks] pushed for  SR : {} " , srDetails );
+        Long endTime = System.currentTimeMillis();
+        log.info("[ScheduledTasks] ConfirmVendor in {} ms \n\n", (endTime - startTime));
+        log.info("\n------------------------------------------------------------------------------------------------------------------------------" );
     }
 
     private List<SRDetail> getSRs(int srCount){
@@ -58,7 +65,7 @@ public class ScheduledTasks {
         return new SRDetail(listOp.leftPop(QUEUE_NAME));
     }
 
-    private void pushSR(List<SRDetail> srDetails){
+    private void pushSR(List<SRDetail> srDetails) {
         ListOperations<String, String> listOps = redisTemplate.opsForList();
         for(SRDetail srDetail : srDetails) {
             listOps.rightPush(QUEUE_NAME, srDetail.getSrId());
