@@ -30,7 +30,7 @@ import static com.hrishikeshmishra.bj.models.Constants.QUEUE_NAME;
 public class RedisDumper implements CommandLineRunner {
 
     private final static String SR_PREFIX = "SR_";
-    private final static int LIMIT = 10;
+    private final static int LIMIT = 100;
     private final static String REDIS_LOAD = "load";
     private final static String REDIS_CLEAN = "clean";
 

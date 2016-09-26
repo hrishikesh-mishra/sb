@@ -36,18 +36,22 @@ public class ScheduledTasks {
     public void confirmVendor() {
         log.info("\n------------------------------------------------------------------------------------------------------------------------------" );
         Long startTime = System.currentTimeMillis();
-        List<SRDetail> srDetails = getSRs(2);
+        List<SRDetail> srDetails = getSRs(5);
         log.info("[ScheduledTasks] starting for  SR : {} " , srDetails );
         if(!Objects.isNull(srDetails)){
             for (SRDetail srDetail : srDetails){
-                producerTemplate.requestBody(CAMEL_VENDOR_ROUTE, srDetail);
+               // producerTemplate.requestBody(CAMEL_VENDOR_ROUTE, srDetail);
+                //producerTemplate.asyncSend(CAMEL_VENDOR_ROUTE, srDetail);
+                //producerTemplate.asyncRequestBody(CAMEL_VENDOR_ROUTE, srDetail);
+                producerTemplate.asyncSendBody(CAMEL_VENDOR_ROUTE, srDetail);
+
             }
         }
         pushSR(srDetails);
         log.info("[ScheduledTasks] pushed for  SR : {} " , srDetails );
         Long endTime = System.currentTimeMillis();
         log.info("[ScheduledTasks] ConfirmVendor in {} ms \n\n", (endTime - startTime));
-        log.info("\n------------------------------------------------------------------------------------------------------------------------------" );
+        //log.info("\n------------------------------------------------------------------------------------------------------------------------------" );
     }
 
     private List<SRDetail> getSRs(int srCount){

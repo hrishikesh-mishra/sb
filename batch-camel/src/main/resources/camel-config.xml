@@ -2,7 +2,7 @@
 
 
     <threadPoolProfile id="defaultThreadPoolProfile" defaultProfile="true"
-                       poolSize="1" maxPoolSize="2" maxQueueSize="1"
+                       poolSize="100" maxPoolSize="100" maxQueueSize="100"
                        allowCoreThreadTimeOut="false"
                        rejectedPolicy="CallerRuns"/>
 
@@ -11,8 +11,8 @@
         <from uri="direct://background-process" />
 
         <throttle  timePeriodMillis="10000" asyncDelayed="true" executorServiceRef="defaultThreadPoolProfile">
-            <constant>1</constant>
-            <to uri="direct://vendor-service" />
+            <constant>1000</constant>
+            <inOnly uri="direct://vendor-service" />
         </throttle>
     </route>
 
